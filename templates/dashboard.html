@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Campus Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">Campus Lost & Found</div>
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('browse_items') }}">Browse</a>
+        <a href="{{ url_for('my_claims') }}">Claims</a>
+        <a href="{{ url_for('notifications') }}">Notifications</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main class="dashboard-container">
+
+    <section class="dashboard-welcome">
+        <h1>Welcome back, {{ user.name }}! 👋</h1>
+        <p>Manage your lost & found activity from one simple dashboard.</p>
+    </section>
+
+    <section class="dashboard-stats">
+        <div class="stat-card"><h3>{{ lost_count }}</h3><p>Lost Items Reported</p></div>
+        <div class="stat-card"><h3>{{ found_count }}</h3><p>Found Items Reported</p></div>
+        <div class="stat-card"><h3>{{ notification_count }}</h3><p>Unread Notifications</p></div>
+    </section>
+
+    <section class="dashboard-actions">
+        <div class="action-card">
+            <div class="action-icon">🔍</div>
+            <h2>Report Lost Item</h2>
+            <p>Lost something on campus? Add its details so the community can help.</p>
+            <a href="{{ url_for('report_lost') }}" class="action-button">Report Lost →</a>
+        </div>
+
+        <div class="action-card">
+            <div class="action-icon">📦</div>
+            <h2>Report Found Item</h2>
+            <p>Found something? Help its owner by putting it on the campus board.</p>
+            <a href="{{ url_for('report_found') }}" class="action-button">Report Found →</a>
+        </div>
+
+        <div class="action-card">
+            <div class="action-icon">🧭</div>
+            <h2>Browse Items</h2>
+            <p>Explore currently open lost reports and available found items.</p>
+            <a href="{{ url_for('browse_items') }}" class="action-button">Browse Items →</a>
+        </div>
+    </section>
+
+    <section class="dashboard-section">
+        <div class="section-heading">
+            <div>
+                <h2>My Lost Items</h2>
+                <p>Items you have reported as lost.</p>
+            </div>
+        </div>
+
+        {% if lost_items %}
+        <div class="item-list">
+            {% for item in lost_items %}
+            <div class="item-card">
+                <div class="item-meta">
+                    <span class="pill primary">{{ item.category_name }}</span>
+                    <span class="pill">{{ item.location_name }}</span>
+                    <span class="status">{{ item.status }}</span>
+                </div>
+                <h3>{{ item.category_name }}</h3>
+                <p><strong>Description:</strong> {{ item.description }}</p>
+                <p><strong>Reported:</strong> {{ item.date_reported }}</p>
+                <div class="item-actions">
+                    <a href="{{ url_for('find_matches', lost_item_id=item.lost_item_id) }}" class="small-button">Find Matches 🔎</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">You have not reported any lost items yet.</div>
+        {% endif %}
+    </section>
+
+    <section class="dashboard-section">
+        <div class="section-heading">
+            <div>
+                <h2>My Found Items</h2>
+                <p>Items you have reported as found.</p>
+            </div>
+        </div>
+
+        {% if found_items %}
+        <div class="item-list">
+            {% for item in found_items %}
+            <div class="item-card">
+                <div class="item-meta">
+                    <span class="pill success">{{ item.category_name }}</span>
+                    <span class="pill">{{ item.location_name }}</span>
+                    <span class="status">{{ item.status }}</span>
+                </div>
+                <h3>{{ item.category_name }}</h3>
+                <p><strong>Description:</strong> {{ item.description }}</p>
+                <p><strong>Reported:</strong> {{ item.date_reported }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">You have not reported any found items yet.</div>
+        {% endif %}
+    </section>
+
+    <section class="dashboard-section">
+        <div class="section-heading">
+            <div>
+                <h2>Quick Access</h2>
+                <p>Jump directly to the parts you use most.</p>
+            </div>
+        </div>
+        <div class="quick-links">
+            <a href="{{ url_for('my_claims') }}" class="small-button">My Claims</a>
+            <a href="{{ url_for('notifications') }}" class="secondary-button">Notifications</a>
+            <a href="{{ url_for('browse_items') }}" class="secondary-button">Browse Items</a>
+        </div>
+    </section>
+</main>
+
+<footer>Campus Lost & Found © 2026</footer>
+</body>
+</html>

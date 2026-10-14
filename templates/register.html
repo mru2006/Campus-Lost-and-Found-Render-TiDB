@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Campus Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">Campus Lost & Found</div>
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('login') }}">Login</a>
+    </div>
+</nav>
+
+<div class="form-container">
+    <div class="form-card">
+        <div class="hero-eyebrow" style="margin:0 auto 18px;display:table">Join your campus</div>
+        <h1>Create your account</h1>
+        <p class="form-subtitle">Register as a student to report and track items.</p>
+
+        <form method="POST" action="{{ url_for('register') }}">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Your full name" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+
+            <label for="prn">PRN</label>
+            <input type="text" id="prn" name="prn" placeholder="Your PRN" required>
+
+            <label for="dept">Department</label>
+            <input type="text" id="dept" name="dept" placeholder="e.g. Computer Engineering" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Create a password" required>
+
+            <button type="submit" class="action-button">Create Account →</button>
+        </form>
+
+        <p class="form-footer">Already registered? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+</div>
+</body>
+</html>

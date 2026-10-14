@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Campus Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">Campus Lost & Found · Admin</div>
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main class="dashboard-container">
+    <section class="dashboard-welcome">
+        <h1>Admin Control Center 🛡️</h1>
+        <p>Review student claims and authorize the return of found items.</p>
+    </section>
+
+    <section class="dashboard-section">
+        <div class="section-heading">
+            <div>
+                <h2>Claim Review Queue</h2>
+                <p>Check the claimant's information and reason before taking action.</p>
+            </div>
+            <span class="pill warning">{{ claims|length }} claims</span>
+        </div>
+
+        {% if claims %}
+        <div class="item-list">
+            {% for claim in claims %}
+            <div class="item-card admin-card {% if claim.status == 'Pending' %}pending{% elif claim.status == 'Approved' %}approved{% else %}rejected{% endif %}">
+                <div class="admin-top">
+                    <h3>Claim #{{ claim.claim_id }}</h3>
+                    {% if claim.status == "Approved" %}
+                        <span class="status approved">Approved</span>
+                    {% elif claim.status == "Rejected" %}
+                        <span class="status rejected">Rejected</span>
+                    {% else %}
+                        <span class="status pending">Pending Review</span>
+                    {% endif %}
+                </div>
+
+                <p class="admin-label">Student</p>
+                <p class="admin-value">{{ claim.student_name }} · {{ claim.student_email }}</p>
+
+                <p class="admin-label" style="margin-top:12px">Found Item</p>
+                <p class="admin-value">{{ claim.category_name }} · {{ claim.location_name }}</p>
+                <p>{{ claim.found_description }}</p>
+
+                <p class="admin-label" style="margin-top:12px">Claimant's Reason</p>
+                <p>{{ claim.reason }}</p>
+
+                <p class="admin-label" style="margin-top:12px">Submitted</p>
+                <p>{{ claim.created_at }}</p>
+
+                {% if claim.status == "Pending" %}
+                <div class="admin-actions">
+                    <a href="{{ url_for('approve_claim', claim_id=claim.claim_id) }}" class="approve-button">✓ Approve Claim</a>
+                    <a href="{{ url_for('reject_claim', claim_id=claim.claim_id) }}" class="reject-button">✕ Reject Claim</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">No student claims have been submitted.</div>
+        {% endif %}
+    </section>
+</main>
+
+<footer>Campus Lost & Found · Administration © 2026</footer>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Campus Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">Campus Lost & Found</div>
+    <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('browse_items') }}">Browse</a>
+        <a href="{{ url_for('my_claims') }}">My Claims</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main class="dashboard-container">
+    <section class="dashboard-welcome">
+        <h1>Notifications 🔔</h1>
+        <p>Stay updated about your claims and lost & found activity.</p>
+    </section>
+
+    <section class="dashboard-section">
+        {% if notifications %}
+        <div class="notification-list">
+            {% for notification in notifications %}
+            <div class="notification-card">
+                <h3>{{ notification.type }}</h3>
+                <p>{{ notification.message }}</p>
+                <small>{{ notification.created_at }}</small>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">You're all caught up — no notifications right now.</div>
+        {% endif %}
+    </section>
+</main>
+
+<footer>Campus Lost & Found © 2026</footer>
+</body>
+</html>

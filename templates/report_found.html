@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Found Item - Campus Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">Campus Lost & Found</div>
+    <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('browse_items') }}">Browse</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<div class="form-container">
+    <div class="form-card">
+        <div class="hero-eyebrow" style="margin:0 auto 18px;display:table">Help someone out</div>
+        <h1>Report a Found Item</h1>
+        <p class="form-subtitle">Add the item's details so its owner can recognize it.</p>
+
+        <form method="POST" action="{{ url_for('report_found') }}">
+            <label for="category_id">Category</label>
+            <select id="category_id" name="category_id" required>
+                <option value="">Select a category</option>
+                {% for category in categories %}
+                <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="location_id">Found Location</label>
+            <select id="location_id" name="location_id" required>
+                <option value="">Select a location</option>
+                {% for location in locations %}
+                <option value="{{ location.location_id }}">{{ location.location_name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="5" placeholder="Color, brand, identifying marks, contents, etc." required></textarea>
+
+            <label for="date_reported">Date Reported</label>
+            <input type="date" id="date_reported" name="date_reported" required>
+
+            <button type="submit" class="action-button">Submit Found Report →</button>
+        </form>
+
+        <p class="form-note">Avoid posting sensitive information that could be used by someone making a false claim.</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Claims - Campus Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">Campus Lost & Found</div>
+    <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('browse_items') }}">Browse</a>
+        <a href="{{ url_for('notifications') }}">Notifications</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</nav>
+
+<main class="dashboard-container">
+
+{% if claim_form %}
+<section class="dashboard-welcome">
+    <h1>Claim Found Item</h1>
+    <p>Tell the administrator why you believe this item belongs to you.</p>
+</section>
+
+<section class="form-container">
+    <div class="form-card">
+        {% if found_item %}
+        <div class="item-meta">
+            <span class="pill success">{{ found_item.category_name }}</span>
+            <span class="pill">{{ found_item.location_name }}</span>
+        </div>
+        <h2>{{ found_item.category_name }}</h2>
+        <p style="color:#64748b;margin-bottom:15px">{{ found_item.description }}</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('claim_item', found_item_id=found_item.found_item_id) }}">
+            <label for="reason">Why do you believe this item belongs to you?</label>
+            <textarea id="reason" name="reason" rows="7" placeholder="Mention identifying details, where you lost it, unique marks, contents, etc." required></textarea>
+            <button type="submit" class="action-button">Submit Claim →</button>
+        </form>
+    </div>
+</section>
+
+{% else %}
+<section class="dashboard-welcome">
+    <h1>My Claims</h1>
+    <p>Track the claims you have submitted and their current status.</p>
+</section>
+
+<section class="dashboard-section">
+    {% if claims %}
+    <div class="item-list">
+        {% for claim in claims %}
+        <div class="item-card">
+            <div class="item-meta">
+                <span class="pill primary">{{ claim.category_name }}</span>
+                <span class="pill">{{ claim.location_name }}</span>
+                {% if claim.status == "Approved" %}
+                    <span class="status approved">Approved</span>
+                {% elif claim.status == "Rejected" %}
+                    <span class="status rejected">Rejected</span>
+                {% else %}
+                    <span class="status pending">{{ claim.status }}</span>
+                {% endif %}
+            </div>
+            <h3>{{ claim.category_name }}</h3>
+            <p><strong>Item:</strong> {{ claim.description }}</p>
+            <p><strong>Your reason:</strong> {{ claim.reason }}</p>
+            <p><strong>Submitted:</strong> {{ claim.created_at }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">You have not submitted any claims yet.</div>
+    {% endif %}
+</section>
+{% endif %}
+
+</main>
+<footer>Campus Lost & Found © 2026</footer>
+</body>
+</html>
